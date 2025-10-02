@@ -13,6 +13,7 @@ dotenv.config();
 const app = express();
 
 // CORS
+//mongodb+srv://abdommdoh814:abdo2002@cluster0.kftppw7.mongodb.net/hotel
 
 // const whitelist = ["http://127.0.0.1:3000", "http://127.0.0.1:3000"];
 // app.use((req: Request, res: Response, next: NextFunction) => {
@@ -38,12 +39,22 @@ app.use(cors());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.static("public"));
+<<<<<<< HEAD
+=======
+>>>>>>> first-version
 
 //routes
 app.use("/auth", authRouter);
 app.use("/room", roomRouter);
 app.use("/reservation", reservationRouter);
+// ✅ هنا تحط routes النجاح والإلغاء
+app.get("/success", (req, res) => {
+  res.send("Payment successful ✅");
+});
+
+app.get("/cancel", (req, res) => {
+  res.send("Payment cancelled ❌");
+});
 //page not found handler
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
   return next(new Error("Page Not Found"));
