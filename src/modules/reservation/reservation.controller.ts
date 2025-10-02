@@ -173,11 +173,14 @@ export const payForReservation = asyncHandler(
     if (!reservation) {
       return next(new Error("Reservation not found"));
     }
-    const successUrl = process.env.SUCCESS_URL;
-    const cancelUrl = process.env.CANCEL_URL;
+    const successUrl = "http://localhost:3000/success";
+    const cancelUrl = "http://localhost:3000/cancel";
 
     if (!successUrl || !cancelUrl) {
       return next(new Error("Stripe URLs are not defined in env"));
+    }
+    if (!process.env.STRIPE_KEY) {
+      return next(new Error("Stripe secret key is not defined in env"));
     }
     const stripe = new Stripe(process.env.STRIPE_KEY!);
     const session = await stripe.checkout.sessions.create({

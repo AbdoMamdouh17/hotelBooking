@@ -1,0 +1,17 @@
+[33mcommit 2bffc23e2bc4a34b7f935bb8d0b63765ebff82f7[m
+Author: Abdo Mamdouh <abdomamdouh815@gmail.com>
+Date:   Wed Oct 1 18:27:23 2025 +0300
+
+    initial commit
+
+[33mcommit 1c1f29b412f5ea6ed59db3f0904e84c9ef7ffc6a[m
+Author: Abdo Mamdouh <abdomamdouh815@gmail.com>
+Date:   Wed Oct 1 18:47:15 2025 +0300
+
+    Update vercel.json and configs for deployment
+
+[33mcommit 0f4733b4ecd30e98452911ea83c42a3d5eea5296[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Abdo Mamdouh <abdomamdouh815@gmail.com>
+Date:   Wed Oct 1 21:08:53 2025 +0300
+
+    delete vercel json

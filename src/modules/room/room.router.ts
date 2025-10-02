@@ -8,7 +8,7 @@ import { fileUpload } from "../../utils/fileUpload.js";
 const router: Router = Router();
 //create room
 router.post(
-  "/creteRoom",
+  "/createRoom",
   isAuthenticated,
   isAuthorized("admin"),
   fileUpload().array("images", 5),
