@@ -39,10 +39,6 @@ app.use(cors());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-<<<<<<< HEAD
-=======
->>>>>>> first-version
-
 //routes
 app.use("/auth", authRouter);
 app.use("/room", roomRouter);
