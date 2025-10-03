@@ -3,6 +3,8 @@ import { Room, IRoom } from "../../DB/models/room.model.js";
 import { asyncHandler } from "../../utils/asyncHandler.js";
 import { Request, Response, NextFunction } from "express";
 import Stripe from "stripe";
+import { Types } from "mongoose";
+import { error } from "console";
 
 export const createReservation = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -186,6 +188,9 @@ export const payForReservation = asyncHandler(
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
+      metadata: {
+        reservationId: (reservation._id as Types.ObjectId).toString(),
+      },
       success_url: successUrl,
       cancel_url: cancelUrl,
       line_items: [
@@ -207,5 +212,43 @@ export const payForReservation = asyncHandler(
       message: "Payment session created successfully",
       session,
     });
+  }
+);
+
+//reservationWebhook
+export const reservationWebhook = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const stripe = new Stripe(process.env.STRIPE_KEY!);
+    const signature = req.headers["stripe-signature"]!;
+    let event;
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET!
+      );
+    } catch (err) {
+      return res.status(400).send("Webhook signature verification failed");
+    }
+    // Handle the event
+    const session = event.data.object as Stripe.Checkout.Session;
+    const reservationID = session.metadata?.reservationId;
+    if (!reservationID) {
+      return res.status(400).send("Reservation ID missing in metadata");
+    }
+
+    if (event.type === "checkout.session.completed") {
+      //change reservation status
+      await Reservation.findOneAndUpdate(
+        { _id: reservationID },
+        { status: "completed" }
+      );
+      return;
+    }
+    await Reservation.findOneAndUpdate(
+      { _id: reservationID },
+      { status: "cancelled" }
+    );
+    res.sendStatus(200);
   }
 );

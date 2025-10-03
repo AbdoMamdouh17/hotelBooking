@@ -1,3 +1,4 @@
+import express from "express";
 import { Router } from "express";
 import { isAuthenticated } from "../../middlware/authentication.middlware.js";
 import { isAuthorized } from "../../middlware/authorization.middlware.js";
@@ -34,6 +35,13 @@ router.post(
   isAuthenticated,
   validation(reservationSchema.payForReservation),
   reservationController.payForReservation
+);
+
+//webhook
+router.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  reservationController.reservationWebhook
 );
 
 export default router;

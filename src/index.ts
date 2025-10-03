@@ -11,7 +11,7 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 dotenv.config();
 const app = express();
-
+//https://hotelbooking-edaf.up.railway.app/
 // CORS
 //mongodb+srv://abdommdoh814:abdo2002@cluster0.kftppw7.mongodb.net/hotel
 
@@ -28,8 +28,14 @@ const app = express();
 //   next();
 // });
 
-//parse json data
-app.use(express.json());
+//global middle ware
+app.use((req: Request, res: Response, next: NextFunction) => {
+  //originalURL
+  if (req.originalUrl === "/reservation/webhook") {
+    return next();
+  }
+  express.json()(req, res, next);
+});
 //parse cookies
 app.use(cookieParser());
 //connect to DataBase
